@@ -1,0 +1,43 @@
+.Mymorph-link {
+    display: inline-block;
+    background-color: rgb(219, 196, 249);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Add these rules to your styles.css file */
+.App-footer {
+    background-color: #282c34;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .footer-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    display: inline;
+    margin: 0 1rem;
+  }
+  
+  .footer-links a {
+    color: #61dafb;
+    text-decoration: none;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+
+  .policy-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  

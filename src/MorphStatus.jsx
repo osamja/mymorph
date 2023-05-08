@@ -3,16 +3,17 @@ import { useParams } from 'react-router-dom';
 import yinyang from './yin-yang-small.png';
 import './App.css';
 
-const domain = 'https://' + window.location.hostname;
-const morph_status_endpoint = domain + '/morph_status';
+const domain = window.location.hostname;
+// const domain = 'dev.pyaar.ai';
+
+const morph_status_endpoint = 'https://' + domain + '/morph/status';
+
+const placeholderImage = yinyang;
 
 const MorphStatus = () => {
   const [morphState, setMorphState] = useState('pending');
   const [morphUri, setMorphUri] = useState(null);
   const [isGifLoaded, setIsGifLoaded] = useState(false);
-
-  const placeholderImage = yinyang;
-
   const { morphId } = useParams();
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const MorphStatus = () => {
               src={isGifLoaded ? morphUri : placeholderImage}
               alt="Morphed GIF"
               loading="lazy"
-              style={{ display: isGifLoaded ? 'inline' : 'none' }}
+              style={{ display: isGifLoaded ? 'inline' : 'none', maxWidth: '100%' }}
               onLoad={() => setIsGifLoaded(true)}
             />
             <img

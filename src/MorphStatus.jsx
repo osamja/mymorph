@@ -1,49 +1,86 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import yinyang from './yin-yang-small.png';
+import './App.css';
 
-// const MorphStatus = (props) => {
-//   const [morphState, setMorphState] = useState(null);
+const domain = 'https://' + window.location.hostname;
+const morph_status_endpoint = domain + '/morph_status';
 
-//   useEffect(() => {
-//     fetchMorphStatus();
-//   }, []);
+const MorphStatus = () => {
+  const [morphState, setMorphState] = useState('pending');
+  const [morphUri, setMorphUri] = useState(null);
+  const [isGifLoaded, setIsGifLoaded] = useState(false);
 
-//   const fetchMorphStatus = async () => {
-//     const morphId = props.match.params.morphId;
-//     const response = await fetch(`https://pyaar.ai/morph_status/${morphId}`);
-//     const data = await response.json();
-//     setMorphState(data.state);
-//   };
+  const placeholderImage = yinyang;
 
-//   const renderMorphStatus = () => {
-//     if (!morphState) {
-//       return <p>Loading...</p>;
-//     }
+  const { morphId } = useParams();
 
-//     switch (morphState) {
-//       case 'pending':
-//         return <p>Your morph request is pending.</p>;
-//       case 'processing':
-//         return <p>Your morph is currently being processed.</p>;
-//       case 'successful':
-//         return (
-//           <div>
-//             <p>Your morph is ready!</p>
-//             <img src={`https://pyaar.ai/morph_gifs/${props.match.params.morphId}.gif`} alt="Morphed GIF" />
-//           </div>
-//         );
-//       case 'failed':
-//         return <p>Unfortunately, your morph request has failed. Please try again.</p>;
-//       default:
-//         return <p>Unknown morph status. Please refresh the page or try again later.</p>;
-//     }
-//   };
+  useEffect(() => {
+    const fetchMorphStatus = async () => {
+      const response = await fetch(`${morph_status_endpoint}/${morphId}`);
+      const data = await response.json();
+  
+      setMorphState(data.status);
+      setMorphUri(data.morphUri);
+    };
+  
+    fetchMorphStatus();
+  }, [morphId]);
 
-//   return (
-//     <div>
-//       <h1>Morph Status</h1>
-//       {renderMorphStatus()}
-//     </div>
-//   );
-// };
+  const renderMorphStatus = () => {
+    switch (morphState) {
+      case 'processing':
+        return (
+          <div>
+            <img
+              src={yinyang}
+              alt="Placeholder"
+              className="App-logo"
+            />
+            <p>Your morph is currently being processed.</p>
+          </div>
+        );
+      case 'complete':
+        return (
+          <div>
+            <p>Your morph is complete!  Your GIF will be shown below</p>
+            <img
+              src={isGifLoaded ? morphUri : placeholderImage}
+              alt="Morphed GIF"
+              loading="lazy"
+              style={{ display: isGifLoaded ? 'inline' : 'none' }}
+              onLoad={() => setIsGifLoaded(true)}
+            />
+            <img
+              src={yinyang}
+              alt="Placeholder"
+              style={{ display: isGifLoaded ? 'none' : 'inline' }}
+              className="App-logo"
+            />
+          </div>
+        );
+      case 'failed':
+        return <p>Unfortunately, your morph request has failed. Please try to morph different images.</p>;
+      default:
+        return (
+          <div>
+            <img
+              src={yinyang}
+              alt="Placeholder"
+              className="App-logo"
+            />
+            <p>Your morph request is pending.</p>
+          </div>
+        );
+    }
+  };
 
-// export default MorphStatus;
+  return (
+    <div>
+      <h1>Morph Status: {morphState}</h1>
+      {renderMorphStatus()}
+    </div>
+  );
+};
+
+export default MorphStatus;

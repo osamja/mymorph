@@ -20,12 +20,9 @@ function App() {
           <Route exact path="/terms-of-service" element={<TermsOfService />} />
           <Route exact path="/terms-of-service.html" element={<TermsOfService />} />
 
-          {/* link the morph status component */}
-          <Route exact path="/morph-status" element={<MorphStatus />} />
-
           {/* Route a url like http://localhost:3000/morph-status/76e47208-7d27-44cd-91f0-347c858c9fea to the morph status component */}
           {/* pass in the morph id as a prop to the component */}
-          <Route exact path="/morph-status/:morphId" element={<MorphStatus />} />
+          <Route exact path="/morph/status/:morphId" element={<MorphStatus />} />
         </Routes>
       </div>
     </BrowserRouter>
